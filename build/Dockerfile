@@ -20,19 +20,21 @@ ADD ${GOSU_DOWNLOAD} /usr/bin/
 # Set correct environment variables.
 ENV HOME=/root
 ENV PORT=8080
-ENV DISPLAYSIZE=1600x900x16
+ENV DISPLAYSIZE=${XDISPLAY_WIDTH}"x"${XDISPLAY_WIDTH}"x"${XDISPLAY_DEPTH}
 ENV DEBIAN_FRONTEND=noninteractive
-ENV LANG=ja_JP.UTF-8
+
 ENV LC_ALL=C.UTF-8
+ENV LANG=ja_JP.UTF-8
 ENV LANGUAGE=${LANG}
+
+# timezone settings
 ENV TZ=Asia/Tokyo
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN apk --update add tzdata --no-cache && \
+    cp /usr/share/zoneinfo/${TZ} /etc/localtime && echo $TZ > /etc/timezone && \
+    apk del tzdata
 
 ENV PACKAGE="wget ca-certificates git bash python xvfb x11vnc fluxbox net-tools socat supervisor xterm "
 # mozc-server fonts-takao-gothic fonts-takao-mincho
-# locale settings
-#RUN echo "ja_JP.UTF-8 UTF-8" >> /etc/locale.gen && \
-#    locale-gen
 
 # Installing apps and clean up.
 RUN echo "http://dl-3.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories

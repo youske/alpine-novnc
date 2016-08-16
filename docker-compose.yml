@@ -5,9 +5,9 @@ services:
     build: build
     environment:
       # Adjust to your screen size
-      - XXXDISPLAY_WIDTH=1600
-      - XXXDISPLAY_HEIGHT=968
-
+      - XDISPLAY_WIDTH=1600
+      - XDISPLAY_HEIGHT=968
+      - XDISPLAY_DEPTH=16
     ulimits:
       nproc: 65535
       nofile:
@@ -16,7 +16,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - data:/tmp
+      - data:/workdir
     networks:
       - x11
 
