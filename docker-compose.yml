@@ -1,0 +1,28 @@
+version: "2"
+services:
+
+  novnc:
+    build: build
+    environment:
+      # Adjust to your screen size
+      - XXXDISPLAY_WIDTH=1600
+      - XXXDISPLAY_HEIGHT=968
+
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 20000
+        hard: 40000
+    ports:
+      - "8080:8080"
+    volumes:
+      - data:/tmp
+    networks:
+      - x11
+
+volumes:
+  data:
+    driver: local
+
+networks:
+  x11:
