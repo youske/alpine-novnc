@@ -44,14 +44,9 @@ RUN apk add --no-cache ${PACKAGE}
 RUN git clone https://github.com/kanaka/noVNC.git /opt/noVNC && \
     git clone https://github.com/kanaka/websockify /opt/websockify && \
     ln -sf /opt/websockify /opt/noVNC/utils/websockify && \
+    ln -s /opt/noVNC/vnc.html /opt/noVNC/index.html && \
     rm -rf /opt/noVNC/.git && \
     rm -rf /opt/websockify/.git
-
-# Download and install noVNC.
-#    wget -qO- "https://github.com/kanaka/noVNC/tarball/master" | tar zx -C /opt/noVNC/ && \
-#    wget -qO- "https://github.com/kanaka/websockify/tarball/master" | tar zx -C /opt/noVNC/utils/websockify/ && \
-RUN    ln -s /opt/noVNC/vnc.html /opt/noVNC/index.html
-
 
 # entrykit install
 RUN tar zxf /tmp/${ENTRYKIT_FILE} -C /usr/bin && \
@@ -71,5 +66,6 @@ RUN tar zxf /tmp/s6-overlay-amd64.tar.gz -C /
 # Configure & run supervisor
 EXPOSE ${PORT} 6000
 COPY novnc.conf /etc/supervisor/conf.d/novnc.conf
+ENTRYPOINT ["switch","shell=/bin/bash","--","/init"]
 #ENTRYPOINT ["render","/etc/supervisor/conf.d/novnc.conf","--","switch","shell=/bin/bash","--","/init"]
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/novnc.conf"]
